@@ -1,19 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { settings, updateAnkiSetting } from '$lib/settings';
-  import { AccordionItem, Label, Toggle, Input, Helper, Select } from 'flowbite-svelte';
+  import { AccordionItem, Helper, Input, Label, Select, Toggle } from 'flowbite-svelte';
 
-  $: disabled = !$settings.ankiConnectSettings.enabled;
+  let disabled = $derived(!$settings.ankiConnectSettings.enabled);
 
-  let enabled = $settings.ankiConnectSettings.enabled;
-  let cropImage = $settings.ankiConnectSettings.cropImage;
-  let grabSentence = $settings.ankiConnectSettings.grabSentence;
-  let overwriteImage = $settings.ankiConnectSettings.overwriteImage;
+  let enabled = $state($settings.ankiConnectSettings.enabled);
+  let cropImage = $state($settings.ankiConnectSettings.cropImage);
+  let grabSentence = $state($settings.ankiConnectSettings.grabSentence);
+  let overwriteImage = $state($settings.ankiConnectSettings.overwriteImage);
 
-  let pictureField = $settings.ankiConnectSettings.pictureField;
-  let sentenceField = $settings.ankiConnectSettings.sentenceField;
+  let pictureField = $state($settings.ankiConnectSettings.pictureField);
+  let sentenceField = $state($settings.ankiConnectSettings.sentenceField);
 
-  let triggerMethod = $settings.ankiConnectSettings.triggerMethod;
+  let heightField = $state($settings.ankiConnectSettings.heightField);
+  let widthField = $state($settings.ankiConnectSettings.widthField);
+  let qualityField = $state($settings.ankiConnectSettings.qualityField);
+
+  let triggerMethod = $state($settings.ankiConnectSettings.triggerMethod);
 
   const triggerOptions = [
     { value: 'rightClick', name: 'Right click (long press on mobile)' },
@@ -24,7 +28,7 @@
 </script>
 
 <AccordionItem>
-  <span slot="header">Anki Connect</span>
+  {#snippet header()}Anki Connect{/snippet}
   <div class="flex flex-col gap-5">
     <Helper
       >For anki connect integration to work, you must add the reader (<code class="text-primary-500"
@@ -36,59 +40,101 @@
       any text box.
     </Helper>
     <div>
-      <Toggle bind:checked={enabled} on:change={() => updateAnkiSetting('enabled', enabled)}
+      <Toggle bind:checked={enabled} onchange={() => updateAnkiSetting('enabled', enabled)}
         >AnkiConnect Integration Enabled</Toggle
       >
     </div>
     <div>
-      <Label>Picture field:</Label>
+      <Label class="text-gray-900 dark:text-white">Picture field:</Label>
       <Input
         {disabled}
         type="text"
         bind:value={pictureField}
-        on:change={() => updateAnkiSetting('pictureField', pictureField)}
+        onchange={() => updateAnkiSetting('pictureField', pictureField)}
       />
     </div>
     <div>
-      <Label>Sentence field:</Label>
+      <Label class="text-gray-900 dark:text-white">Sentence field:</Label>
       <Input
         {disabled}
         type="text"
         bind:value={sentenceField}
-        on:change={() => updateAnkiSetting('sentenceField', sentenceField)}
+        onchange={() => updateAnkiSetting('sentenceField', sentenceField)}
       />
     </div>
     <div>
       <Toggle
         {disabled}
         bind:checked={cropImage}
-        on:change={() => updateAnkiSetting('cropImage', cropImage)}>Crop image</Toggle
+        onchange={() => updateAnkiSetting('cropImage', cropImage)}>Crop image</Toggle
       >
     </div>
     <div>
       <Toggle
         {disabled}
         bind:checked={overwriteImage}
-        on:change={() => updateAnkiSetting('overwriteImage', overwriteImage)}
-        >Overwrite image</Toggle
+        onchange={() => updateAnkiSetting('overwriteImage', overwriteImage)}>Overwrite image</Toggle
       >
     </div>
     <div>
       <Toggle
         {disabled}
         bind:checked={grabSentence}
-        on:change={() => updateAnkiSetting('grabSentence', grabSentence)}>Grab sentence</Toggle
+        onchange={() => updateAnkiSetting('grabSentence', grabSentence)}>Grab sentence</Toggle
       >
     </div>
     <div>
-      <Label>
+      <Label class="text-gray-900 dark:text-white">
         Trigger method:
         <Select
-          on:change={() => updateAnkiSetting('triggerMethod', triggerMethod)}
+          onchange={() => updateAnkiSetting('triggerMethod', triggerMethod)}
           items={triggerOptions}
           bind:value={triggerMethod}
         />
       </Label>
+    </div>
+    <hr />
+    <h4 class="text-gray-900 dark:text-white">Quality Settings</h4>
+    <Helper>Allows you to customize the file size stored on your devices</Helper>
+    <div>
+      <Label class="text-gray-900 dark:text-white">Max Height (0 = Ignore; 200 Recommended):</Label>
+      <Input
+        {disabled}
+        type="number"
+        bind:value={heightField}
+        onchange={() => {
+          updateAnkiSetting('heightField', heightField);
+          if (heightField < 0) heightField = 0;
+        }}
+        min={0}
+      />
+    </div>
+    <div>
+      <Label class="text-gray-900 dark:text-white">Max Width (0 = Ignore; 200 Recommended):</Label>
+      <Input
+        {disabled}
+        type="number"
+        bind:value={widthField}
+        onchange={() => {
+          updateAnkiSetting('widthField', widthField);
+          if (widthField < 0) widthField = 0;
+        }}
+        min={0}
+      />
+    </div>
+    <div>
+      <Label class="text-gray-900 dark:text-white"
+        >Quality (Between 0 and 1; 0.5 Recommended):</Label
+      >
+      <Input
+        {disabled}
+        type="number"
+        bind:value={qualityField}
+        onchange={() => updateAnkiSetting('qualityField', qualityField)}
+        min={0}
+        max={1}
+        step="0.1"
+      />
     </div>
   </div>
 </AccordionItem>
