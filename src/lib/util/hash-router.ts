@@ -142,7 +142,10 @@ export const nav = {
   toUpload: (options?: NavigateOptions) => navigate({ type: 'upload' }, options),
 
   /** Navigate to reading speed page */
-  toReadingSpeed: (options?: NavigateOptions) => navigate({ type: 'reading-speed' }, options)
+  toReadingSpeed: (options?: NavigateOptions) => navigate({ type: 'reading-speed' }, options),
+
+  /** Navigate to progress tracker page */
+  toProgressTracker: (options?: NavigateOptions) => navigate({ type: 'progress-tracker' }, options)
 };
 
 /**
