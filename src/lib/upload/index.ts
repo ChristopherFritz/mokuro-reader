@@ -220,10 +220,21 @@ async function uploadVolumeData(
 
       // Generate thumbnail from first file
       let thumbnailResult: { file: File; width: number; height: number } | undefined;
-      const firstFileKey = uploadData.files ? Object.keys(uploadData.files)[0] : undefined;
-      const firstFile = firstFileKey ? uploadData.files?.[firstFileKey] : undefined;
-      if (firstFile) {
-        thumbnailResult = await generateThumbnail(firstFile);
+      if (uploadData.files) {
+        const fileNames = Object.keys(uploadData.files);
+
+        // First try to find a file with "cover" in the name (case-insensitive)
+        let coverFileName = fileNames.find((name) => name.toLowerCase().includes('cover'));
+
+        // If no cover file found, use the first file (already sorted)
+        if (!coverFileName && fileNames.length > 0) {
+          coverFileName = fileNames[0];
+        }
+
+        const firstFile = coverFileName ? uploadData.files[coverFileName] : undefined;
+        if (firstFile) {
+          thumbnailResult = await generateThumbnail(firstFile);
+        }
       }
 
       // Calculate cumulative character counts from pages
