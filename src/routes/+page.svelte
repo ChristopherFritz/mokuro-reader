@@ -13,7 +13,8 @@
     'series-text': () => import('$lib/views/SeriesTextView.svelte'),
     cloud: () => import('$lib/views/CloudView.svelte'),
     upload: () => import('$lib/views/UploadView.svelte'),
-    'reading-speed': () => import('$lib/views/ReadingSpeedView.svelte')
+    'reading-speed': () => import('$lib/views/ReadingSpeedView.svelte'),
+    'progress-tracker': () => import('$lib/views/ProgressTrackerView.svelte')
   };
 
   // Currently loaded component

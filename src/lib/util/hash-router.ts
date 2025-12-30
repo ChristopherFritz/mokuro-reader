@@ -16,7 +16,8 @@ export type View =
   | { type: 'series-text'; seriesId: string }
   | { type: 'cloud' }
   | { type: 'upload' }
-  | { type: 'reading-speed' };
+  | { type: 'reading-speed' }
+  | { type: 'progress-tracker' };
 
 /**
  * Current view state
@@ -38,6 +39,7 @@ export function parseHash(hash: string): View {
     if (segments[0] === 'cloud') return { type: 'cloud' };
     if (segments[0] === 'upload') return { type: 'upload' };
     if (segments[0] === 'reading-speed') return { type: 'reading-speed' };
+    if (segments[0] === 'progress-tracker') return { type: 'progress-tracker' };
 
     if (segments[0] === 'series' && segments.length >= 2) {
       const seriesId = decodeURIComponent(segments[1]);
@@ -82,6 +84,8 @@ export function viewToHash(view: View): string {
       return '#/upload';
     case 'reading-speed':
       return '#/reading-speed';
+    case 'progress-tracker':
+      return '#/progress-tracker';
   }
 }
 
