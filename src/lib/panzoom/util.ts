@@ -322,7 +322,7 @@ export function handleWheel(e: WheelEvent): void {
     // Mac trackpad/mouse feels correct at full speed, but Windows/Linux
     // mice with discrete scroll wheels are too aggressive - halve the speed
     const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
-    const platformMultiplier = isMac ? 1 : 0.5;
+    const platformMultiplier = isMac ? 1 : 0.25;
 
     const normalizedDelta = -e.deltaY * baseMultiplier * platformMultiplier;
 
