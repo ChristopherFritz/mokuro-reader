@@ -90,8 +90,7 @@
   let googleDriveLoading = $state(false);
 
   // Check if Google Drive is configured with required API credentials
-  const isGoogleDriveEnabled =
-    !!GOOGLE_DRIVE_CONFIG.CLIENT_ID && !!GOOGLE_DRIVE_CONFIG.API_KEY;
+  const isGoogleDriveEnabled = !!GOOGLE_DRIVE_CONFIG.CLIENT_ID && !!GOOGLE_DRIVE_CONFIG.API_KEY;
 
   // MEGA login state
   let megaEmail = $state('');
