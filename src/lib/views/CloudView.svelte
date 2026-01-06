@@ -16,6 +16,7 @@
   } from '$lib/util/sync/provider-interface';
   import { backupQueue } from '$lib/util/backup-queue';
   import { tokenManager } from '$lib/util/sync/providers/google-drive';
+  import { GOOGLE_DRIVE_CONFIG } from '$lib/util/sync/providers/google-drive/constants';
   import { Alert, Badge, Button, Radio, Toggle, Spinner } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { GoogleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
@@ -87,6 +88,10 @@
 
   // Google Drive login state
   let googleDriveLoading = $state(false);
+
+  // Check if Google Drive is configured with required API credentials
+  const isGoogleDriveEnabled =
+    !!GOOGLE_DRIVE_CONFIG.CLIENT_ID && !!GOOGLE_DRIVE_CONFIG.API_KEY;
 
   // MEGA login state
   let megaEmail = $state('');
@@ -565,7 +570,7 @@
           <button
             class="border-opacity-50 w-full rounded-lg border border-slate-600 p-6 transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
             onclick={handleGoogleDriveLogin}
-            disabled={googleDriveLoading}
+            disabled={googleDriveLoading || !isGoogleDriveEnabled}
           >
             <div class="flex items-center gap-4">
               {#if googleDriveLoading}
@@ -575,7 +580,13 @@
               {/if}
               <div class="flex-1 text-left">
                 <div class="text-lg font-semibold">Google Drive</div>
-                <div class="text-sm text-gray-400">15GB free • Requires re-auth every hour</div>
+                <div class="text-sm text-gray-400">
+                  {#if !isGoogleDriveEnabled}
+                    Google Drive is not enabled
+                  {:else}
+                    15GB free • Requires re-auth every hour
+                  {/if}
+                </div>
               </div>
             </div>
           </button>
